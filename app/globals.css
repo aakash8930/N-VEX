@@ -1,0 +1,236 @@
+@import 'tailwindcss';
+
+/* ————————————————————————————————————————————————
+   NØVEX design tokens — sampled from the source footage:
+   near-black void, gunmetal/chrome, warm blueprint paper,
+   industrial crimson signal red.
+———————————————————————————————————————————————— */
+@theme {
+  /* surfaces */
+  --color-void: #050505;
+  --color-abyss: #08090b;
+  --color-carbon: #0c0e10;
+  --color-graphite: #121518;
+  --color-gunmetal: #1a1e23;
+  --color-steel: #2a3037;
+
+  /* type */
+  --color-bone: #e9e7e1;
+  --color-paper: #e6e4dd;
+  --color-ash: #9aa0a6;
+  --color-dim: #5d636b;
+
+  /* signal */
+  --color-signal: #c1121f;
+  --color-signal-hot: #ff2d20;
+  --color-signal-deep: #6d0f16;
+
+  /* fonts (self-hosted via @fontsource) */
+  --font-sans: 'Archivo Variable', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* tracking */
+  --tracking-tech: 0.22em;
+  --tracking-hud: 0.34em;
+
+  /* easing */
+  --ease-cine: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    background: var(--color-void);
+  }
+
+  body {
+    margin: 0;
+    background: var(--color-void);
+    color: var(--color-bone);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--color-signal) 45%, transparent);
+    color: #fff;
+  }
+
+  :focus-visible {
+    outline: 1px solid var(--color-signal-hot);
+    outline-offset: 4px;
+  }
+
+  h1, h2, h3, h4 {
+    font-weight: 200;
+    margin: 0;
+  }
+
+  p { margin: 0; }
+}
+
+@layer components {
+  /* ————— typography ————— */
+  .t-display {
+    font-family: var(--font-sans);
+    font-weight: 200;
+    text-transform: uppercase;
+    line-height: 0.88;
+    letter-spacing: -0.015em;
+  }
+  .t-h1 { font-size: clamp(2.9rem, 7.6vw, 7.8rem); }
+  .t-h2 { font-size: clamp(2.4rem, 7.5vw, 7.5rem); }
+  .t-h3 { font-size: clamp(1.5rem, 3.4vw, 3.2rem); }
+
+  .t-label {
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: var(--tracking-tech);
+    text-transform: uppercase;
+    color: var(--color-ash);
+  }
+
+  /* ————— blueprint grid (very subtle, like the drawing sheets) ————— */
+  .bp-grid {
+    --bp: 72px;
+    background-image:
+      linear-gradient(to right, color-mix(in oklab, var(--color-paper) 6%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in oklab, var(--color-paper) 6%, transparent) 1px, transparent 1px);
+    background-size: var(--bp) var(--bp);
+    background-position: center;
+  }
+  .bp-grid-fine {
+    --bp: 18px;
+    background-image:
+      linear-gradient(to right, color-mix(in oklab, var(--color-paper) 3%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in oklab, var(--color-paper) 3%, transparent) 1px, transparent 1px);
+    background-size: var(--bp) var(--bp);
+  }
+
+  /* ————— hairline rules ————— */
+  .hairline-h {
+    height: 1px;
+    background: linear-gradient(to right, transparent, color-mix(in oklab, var(--color-bone) 16%, transparent), transparent);
+  }
+  .hairline-v {
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, color-mix(in oklab, var(--color-bone) 16%, transparent), transparent);
+  }
+
+  /* ————— film / atmosphere overlays ————— */
+  .grain {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+    background-size: 160px 160px;
+  }
+  .scanlines {
+    background-image: repeating-linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--color-bone) 4%, transparent) 0px,
+      transparent 1px,
+      transparent 4px
+    );
+  }
+  .vig {
+    background: radial-gradient(120% 90% at 50% 40%, transparent 55%, rgba(0, 0, 0, 0.55) 100%);
+  }
+
+  /* ————— red glow primitives ————— */
+  .glow-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 9999px;
+    background: var(--color-signal-hot);
+    box-shadow:
+      0 0 6px 1px color-mix(in oklab, var(--color-signal-hot) 70%, transparent),
+      0 0 18px 4px color-mix(in oklab, var(--color-signal-hot) 28%, transparent);
+  }
+  .glow-pulse {
+    animation: nvx-pulse 2.4s var(--ease-soft) infinite;
+  }
+
+  /* ————— tracking-in reveal for technical labels (CSS handles em units) ————— */
+  .trk-in {
+    opacity: 0;
+    letter-spacing: 0.42em;
+    transition: letter-spacing 1.4s var(--ease-cine), opacity 1s var(--ease-soft);
+  }
+  .trk-in.is-in {
+    opacity: 1;
+    letter-spacing: var(--tracking-tech);
+  }
+
+  /* ————— line-mask reveal for display headings ————— */
+  .mask-line { display: block; overflow: hidden; }
+  .mask-line > span { display: block; will-change: transform; }
+
+  /* ————— HUD corner brackets ————— */
+  .hud-corner { position: relative; }
+  .hud-corner::before,
+  .hud-corner::after {
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border-color: color-mix(in oklab, var(--color-signal) 75%, transparent);
+    border-style: solid;
+  }
+  .hud-corner::before { top: 0; left: 0; border-width: 1px 0 0 1px; }
+  .hud-corner::after { bottom: 0; right: 0; border-width: 0 1px 1px 0; }
+
+  /* ————— process timeline illumination ————— */
+  .pitem .pnode {
+    border: 1px solid color-mix(in oklab, var(--color-bone) 25%, transparent);
+    background: var(--color-void);
+    transition: background 0.5s, border-color 0.5s, box-shadow 0.5s;
+  }
+  .pitem.is-active .pnode {
+    border-color: var(--color-signal-hot);
+    background: var(--color-signal-hot);
+    box-shadow: 0 0 12px color-mix(in oklab, var(--color-signal-hot) 60%, transparent);
+  }
+  .pitem .pidx { color: var(--color-dim); transition: color 0.5s; }
+  .pitem.is-active .pidx { color: var(--color-signal-hot); }
+  .pitem .pttl { color: var(--color-ash); transition: color 0.5s; }
+  .pitem.is-active .pttl { color: var(--color-bone); }
+
+  /* ————— smooth-scroller layout (only when active) ————— */
+  #smooth-wrapper { position: relative; }
+  html.has-smoother,
+  html.has-smoother body { height: 100%; }
+  html.has-smoother #smooth-wrapper { position: fixed; inset: 0; overflow: hidden; }
+  html.has-smoother #smooth-content { overflow: visible; width: 100%; }
+}
+
+@keyframes nvx-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(0.82); }
+}
+
+@keyframes nvx-drift {
+  from { background-position: 0 0; }
+  to { background-position: 0 -144px; }
+}
+
+@keyframes nvx-scroll {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(400%); }
+}
+
+@keyframes nvx-rot {
+  to { transform: rotate(360deg); }
+}
+
+/* Reduced motion: collapse all of it. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .trk-in { opacity: 1; letter-spacing: var(--tracking-tech); }
+}
