@@ -308,7 +308,9 @@ export function SystemVisualization() {
   }, [reduced]);
 
   return (
-    <section id="system" ref={sectionRef} className="relative h-[230vh] bg-void">
+    <section id="system" ref={sectionRef} className="relative h-[200vh]">
+      {/* faint grid so the scroll tail reads as part of the scene, not dead black */}
+      <div className="bp-grid-fine absolute inset-0 opacity-40" aria-hidden="true" />
       <div className="sticky top-0 h-[100svh] overflow-hidden">
         <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
 

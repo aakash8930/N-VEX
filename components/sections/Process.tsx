@@ -41,7 +41,7 @@ export function Process() {
   }, [reduced]);
 
   return (
-    <section id="process" className="relative overflow-hidden bg-abyss/40 py-[22vh]">
+    <section id="process" className="relative overflow-hidden bg-abyss/40 pb-[22vh] pt-[14vh]">
       <div className="bp-grid-fine absolute inset-0 opacity-50" aria-hidden="true" />
       <div className="relative mx-auto max-w-[1600px] px-5 md:px-10">
         <div className="mb-20 flex flex-wrap items-end justify-between gap-8">
