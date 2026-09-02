@@ -10,7 +10,7 @@ export function FinalCta() {
   const [ref, inView] = useInViewOnce<HTMLDivElement>(0.3);
 
   return (
-    <section id="contact" className="relative overflow-hidden bg-void py-[28vh]">
+    <section id="contact" className="relative overflow-hidden py-[28vh]">
       {/* faint globe-like glow bottom */}
       <div
         className="pointer-events-none absolute bottom-[-40%] left-1/2 h-[80%] w-[120%] -translate-x-1/2 rounded-[100%] opacity-40"

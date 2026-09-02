@@ -2,7 +2,7 @@ import { BRAND, FOOTER_COLUMNS, COORDS } from '@/data/content';
 
 export function SiteFooter() {
   return (
-    <footer className="relative border-t border-bone/10 bg-void">
+    <footer className="relative border-t border-bone/10 bg-void/80">
       <div className="mx-auto max-w-[1600px] px-5 py-16 md:px-10">
         <div className="grid gap-12 md:grid-cols-[1.4fr_repeat(4,1fr)]">
           {/* brand */}

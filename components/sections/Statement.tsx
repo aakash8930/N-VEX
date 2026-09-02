@@ -5,7 +5,7 @@ import { Reveal } from '@/components/ui/Reveal';
 /** Intro / statement — nearly black, blueprint grid, huge thin type. */
 export function Statement() {
   return (
-    <section id="about" className="relative overflow-hidden bg-void py-[24vh]">
+    <section id="about" className="relative overflow-hidden py-[24vh]">
       {/* drifting blueprint grid */}
       <div className="bp-grid absolute inset-0 opacity-70" data-speed="0.85" aria-hidden="true" />
       <div className="bp-grid-fine absolute inset-0" aria-hidden="true" />

@@ -39,7 +39,7 @@ export function Hero() {
   }, []);
 
   return (
-    <section id="top" ref={rootRef} className="relative min-h-[100svh] overflow-hidden bg-void">
+    <section id="top" ref={rootRef} className="relative min-h-[100svh] overflow-hidden">
       <HeroVideo />
 
       {/* legibility scrims */}

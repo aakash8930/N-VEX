@@ -73,7 +73,7 @@ function Stat({ stat }: { stat: TechStat }) {
 /** SECTION 7 — technical readouts (easily replaceable placeholders). */
 export function TechnicalData() {
   return (
-    <section id="data" className="relative overflow-hidden bg-void py-[22vh]">
+    <section id="data" className="relative overflow-hidden py-[22vh]">
       <div className="bp-grid-fine absolute inset-0 opacity-50" aria-hidden="true" />
       <div className="relative mx-auto max-w-[1600px] px-5 md:px-10">
         <div className="mb-16 flex flex-wrap items-end justify-between gap-8">

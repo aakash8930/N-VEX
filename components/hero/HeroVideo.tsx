@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion';
+import { videoBus } from '@/lib/videoBus';
 import { cn } from '@/lib/cn';
 
 const SRC = '/video/nvex-hero.mp4';
@@ -17,50 +18,23 @@ function fmt(t: number): string {
 }
 
 /**
- * Full-bleed hero composition: a centered, intact 9:16 video plate whose edges
- * feather into the void, an ambient blurred "wash" of the same footage filling
- * the gutters, HUD corner markers, and a live progress rail synced to playback.
+ * Hero video composition: an intact, centered 9:16 plate whose edges feather
+ * into the void, HUD corner markers and a live progress rail. The same
+ * decoder also feeds the site-wide VideoAtmosphere background, so the clip
+ * keeps playing (and ambiently visible) across the whole page.
  */
 export function HeroVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const washRef = useRef<HTMLCanvasElement>(null);
   const tickRef = useRef<HTMLDivElement>(null);
   const readRef = useRef<HTMLSpanElement>(null);
   const reduced = usePrefersReducedMotion();
   const [ready, setReady] = useState(false);
 
-  // Ambient wash: draw the video into a tiny canvas, upscaled + blurred in CSS.
+  // Share the decoder with the global atmosphere layer.
   useEffect(() => {
-    const v = videoRef.current;
-    const c = washRef.current;
-    if (!v || !c) return;
-    const ctx = c.getContext('2d');
-    if (!ctx) return;
-    const W = (c.width = 90);
-    const H = (c.height = 160);
-
-    const draw = () => {
-      if (v.readyState >= 2) ctx.drawImage(v, 0, 0, W, H);
-    };
-
-    if (reduced) {
-      const once = () => draw();
-      if (v.readyState >= 2) once();
-      else v.addEventListener('loadeddata', once, { once: true });
-      return;
-    }
-
-    let raf = 0;
-    let last = 0;
-    const loop = (t: number) => {
-      raf = requestAnimationFrame(loop);
-      if (t - last < 100) return; // ~10fps is plenty for a blurred wash
-      last = t;
-      draw();
-    };
-    raf = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(raf);
-  }, [reduced]);
+    videoBus.set(videoRef.current);
+    return () => videoBus.set(null);
+  }, []);
 
   // Reduced motion: show a static, representative frame instead of autoplaying.
   useEffect(() => {
@@ -74,48 +48,37 @@ export function HeroVideo() {
     else v.addEventListener('loadedmetadata', seek, { once: true });
   }, [reduced]);
 
-  // Pause when the hero leaves the viewport (perf) + drive progress rail.
+  // Pause only when the tab is hidden (perf); keep playing site-wide otherwise.
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v || reduced) return;
+    const onVis = () => {
+      if (document.hidden) v.pause();
+      else v.play().catch(() => {});
+    };
+    document.addEventListener('visibilitychange', onVis);
+    return () => document.removeEventListener('visibilitychange', onVis);
+  }, [reduced]);
+
+  // Drive the progress rail.
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
-
-    let inView = true;
-    const io = new IntersectionObserver(
-      ([e]) => {
-        inView = e.isIntersecting;
-        if (reduced) return;
-        if (e.isIntersecting) v.play().catch(() => {});
-        else v.pause();
-      },
-      { threshold: 0.05 },
-    );
-    io.observe(v);
-
     let raf = 0;
     const loop = () => {
       raf = requestAnimationFrame(loop);
-      if (!inView || reduced) return;
+      if (reduced || document.hidden) return;
       const d = v.duration || 1;
       const p = Math.min(1, Math.max(0, (v.currentTime || 0) / d));
       if (tickRef.current) tickRef.current.style.transform = `translateY(${p * 100}%)`;
       if (readRef.current) readRef.current.textContent = fmt(v.currentTime || 0);
     };
     raf = requestAnimationFrame(loop);
-
-    return () => {
-      io.disconnect();
-      cancelAnimationFrame(raf);
-    };
+    return () => cancelAnimationFrame(raf);
   }, [reduced]);
 
   return (
     <div className="absolute inset-0" aria-hidden="true">
-      {/* ambient wash of the same footage (gutter ambience, no extra decoder) */}
-      <canvas
-        ref={washRef}
-        className="absolute left-1/2 top-1/2 h-[130%] w-[130%] -translate-x-1/2 -translate-y-1/2 opacity-30 blur-3xl saturate-[0.85]"
-      />
-
       {/* the intact 9:16 plate — right-shifted on desktop to free the left gutter */}
       <div className="absolute inset-0 grid place-items-center lg:justify-end lg:pr-[5vw]">
         <div className="relative aspect-[9/16] h-full max-h-full max-w-[96vw]">

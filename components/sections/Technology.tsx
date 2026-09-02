@@ -78,7 +78,7 @@ export function Technology() {
   }, [reduced]);
 
   return (
-    <section id="capabilities" className="relative overflow-hidden bg-abyss py-[22vh]">
+    <section id="capabilities" className="relative overflow-hidden bg-abyss/40 py-[22vh]">
       <div className="bp-grid-fine absolute inset-0 opacity-60" aria-hidden="true" />
       <div className="relative mx-auto max-w-[1600px] px-5 md:px-10">
         <div className="mb-16 flex flex-wrap items-end justify-between gap-8">

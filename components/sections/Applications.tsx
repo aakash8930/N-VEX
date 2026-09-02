@@ -35,7 +35,7 @@ function RingSchematic() {
 /** SECTION 6 — applications. */
 export function Applications() {
   return (
-    <section id="applications" className="relative overflow-hidden bg-void py-[22vh]">
+    <section id="applications" className="relative overflow-hidden py-[22vh]">
       <div className="bp-grid absolute inset-0 opacity-40" aria-hidden="true" />
       <RingSchematic />
 
