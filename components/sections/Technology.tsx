@@ -42,7 +42,7 @@ function TechRow({ cap }: { cap: Capability }) {
         {cap.meta.map((m) => (
           <span key={m.k} className="border border-bone/15 px-3 py-1.5">
             <span className="t-label">
-              {m.k} <span className="text-signal-hot">{m.v}</span>
+              {m.k} <span className="normal-case text-signal-hot">{m.v}</span>
             </span>
           </span>
         ))}

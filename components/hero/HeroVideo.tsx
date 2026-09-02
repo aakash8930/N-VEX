@@ -81,7 +81,7 @@ export function HeroVideo() {
     <div className="absolute inset-0" aria-hidden="true">
       {/* the intact 9:16 plate — right-shifted on desktop to free the left gutter */}
       <div className="absolute inset-0 grid place-items-center lg:justify-end lg:pr-[5vw]">
-        <div className="relative aspect-[9/16] h-full max-h-full max-w-[96vw]">
+        <div className="relative aspect-[9/16] h-full max-h-full max-w-[96vw]" data-speed="0.85">
           <video
             ref={videoRef}
             className={cn(
